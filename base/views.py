@@ -3,9 +3,9 @@ from django.http import HttpResponse
 from .models import Habitacion
 # Create your views here.
 
-rooms = [{"id": 1, "name": "Me gusta python !"},
+'''rooms = [{"id": 1, "name": "Me gusta python !"},
          {"id": 2, "name": "Me gusta C++ !"},
-         {"id": 3, "name": "Me gusta DJANGO Framework !"}]
+         {"id": 3, "name": "Me gusta DJANGO Framework !"}]'''
 
 def home(request):
     rooms = Habitacion.objects.all()
@@ -13,11 +13,7 @@ def home(request):
     return render(request, "home.html", contexto)
 
 def room(request, pk):
-    room = None
-
-    for i in rooms:
-        if i["id"] == int(pk):
-            room = i
+    room = Habitacion.objects.get(id=pk)
 
     contexto = {"room": room}
 
