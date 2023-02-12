@@ -3,6 +3,7 @@ from django.db.models import Q # Esto te permite puertas "and" "or" etc .. busca
 from django.http import HttpResponse
 from django.contrib.auth.models import User # Importa usuario del MODEL
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required # Decorador de django para restringir paginas
 from django.contrib import messages
 from .models import Habitacion, Tema
 from .forms import HabitacionForm
@@ -11,6 +12,12 @@ from .forms import HabitacionForm
 '''rooms = [{"id": 1, "name": "Me gusta python !"},
          {"id": 2, "name": "Me gusta C++ !"},
          {"id": 3, "name": "Me gusta DJANGO Framework !"}]'''
+
+def logOut(request):
+
+    logout(request)
+    return redirect("home")
+
 
 def loginPage(request):
 
@@ -58,6 +65,8 @@ def room(request, pk):
     #return HttpResponse("Habitacion")
     return render(request, "room.html", contexto)
 
+
+@login_required(login_url="login-page") # Decorador que restringe acceso y redirecciona a login
 def createroom(request):
     form = HabitacionForm()
     contexto = {"form": form}
@@ -72,10 +81,13 @@ def createroom(request):
 
     return render(request, "room_form.html", contexto)
 
-
+@login_required(login_url="login-page") # Decorador que restringe acceso y redirecciona a login
 def actualizarHabitacion(request, pk):
     room = Habitacion.objects.get(id=pk)
     form = HabitacionForm(instance=room)
+
+    if not (request.user == room.host):
+        return HttpResponse("Tu no estas permitido aqui !") #Que es request.user https://stackoverflow.com/questions/17312831/what-does-request-user-refer-to-in-django
 
     if request.method == "POST":
         form = HabitacionForm(request.POST, instance=room)
@@ -87,7 +99,7 @@ def actualizarHabitacion(request, pk):
 
     return render(request, "room_form.html", contexto)
 
-
+@login_required(login_url="login-page") # Decorador que restringe acceso y redirecciona a login
 def eliminarHabitacion(request, pk):
 
     room = Habitacion.objects.get(id=pk)

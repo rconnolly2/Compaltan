@@ -6,6 +6,9 @@
     <input type="text" name="q" placeholder="Buscar habitaciones ...">
 </form>
 
+{% if request.user.is_authenticated %}
+<a href="logout-page/">Logout</a>
+{% else %}
 <a href="login-page/">Login</a>
-
+{% endif %}
 <hr>
