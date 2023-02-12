@@ -5,6 +5,7 @@ from django.contrib.auth.models import User # Importa usuario del MODEL
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required # Decorador de django para restringir paginas
 from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm # Nos facilita crear formulario para usuarios nuevos
 from .models import Habitacion, Tema
 from .forms import HabitacionForm
 # Create your views here.
@@ -18,11 +19,34 @@ def logOut(request):
     logout(request)
     return redirect("home")
 
-
-def loginPage(request):
+def registrarUsuario(request):
+    pagina = "registrar"
+    formulario = UserCreationForm()
 
     if request.method == "POST":
-        usuario = request.POST.get("usuario")
+        formulario = UserCreationForm(request.POST)
+        if formulario.is_valid() == True:
+            usuario = formulario.save(commit=False)
+            usuario.username = usuario.username.lower()
+            usuario.save()
+            login(request, usuario)
+            return redirect("home")
+        else:
+            messages.error(request, "Hubo un error al registrarse!")
+    
+    contexto = {"pagina": pagina, "formulario": formulario}
+    return render(request, "login-register.html", contexto)
+
+
+def loginPage(request):
+    pagina = "login"
+
+    if request.user.is_authenticated:
+        return redirect("home") #Si el usuario ya esta logueado y intenta entrar a la link /login/ le redireccionara
+
+
+    if request.method == "POST":
+        usuario = request.POST.get("usuario").lower()
         password = request.POST.get("password")
 
         try:
@@ -39,7 +63,7 @@ def loginPage(request):
             messages.error(request, "Contraseña no es valida!")
 
 
-    contexto = {}
+    contexto = {"pagina": pagina}
     return render(request, "login-register.html", contexto)
 
 
@@ -54,7 +78,7 @@ def home(request):
     rooms = Habitacion.objects.filter(Q(tema__nombre__icontains=q) | Q(descripcion__icontains=q) | Q(nombre__icontains=q)) # Q te permite poner varios parametros 
     numero_habitaciones = len(rooms)
 
-    contexto = {"rooms": rooms, "temas": temas, "numero_habitaciones": numero_habitaciones}
+    contexto = {"rooms": rooms, "temas": temas, "numero_habitaciones": numero_habitaciones, "request": request}
     return render(request, "home.html", contexto)
 
 def room(request, pk):

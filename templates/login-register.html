@@ -3,6 +3,7 @@
 
 {% block content %}
 
+{% if pagina == "login" %}
 <div>
 
     <form method="POST" action="">
@@ -13,9 +14,24 @@
         <input type="text" name="password" placeholder="Pon tu contraseña..."><br>
         <input type="submit" value="Login">
     </form>
-
+    <p>¿No te has registrado aun?</p>
+    <a href="{% url 'registrarUsuario' %}">Registarte</a>
 
 </div>
+{% else %}
+<div>
 
+    <form method="POST" action="">
+        {% csrf_token %}
+        {{formulario.as_p}}
+        <input type="submit" value="Registrar">
+    </form>
+    {% for mensaje in messages %}
+        {{mensaje}}
+    {% endfor %}
+    <p>Ya te has registrado</p>
+    <a href="{% url 'login-page' %}">Login</a>
 
+</div>
+{% endif %}
 {% endblock content %}

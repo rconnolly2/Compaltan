@@ -11,4 +11,5 @@ urlpatterns = [
     path("eliminar-room/<str:pk>", views.eliminarHabitacion, name="eliminar-room"),
     path("login-page/", views.loginPage, name="login-page"),
     path("logout-page/", views.logOut, name="logOut"),
+    path("registrar-usuario/", views.registrarUsuario, name="registrarUsuario")
 ]
