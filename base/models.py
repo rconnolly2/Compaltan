@@ -20,6 +20,10 @@ class Habitacion(models.Model):
     updated = models.DateTimeField(auto_now=True)
     creado = models.DateTimeField(auto_now_add=True) #Este valor solo cambia cuando se INICIA UNA VEZ
 
+
+    class Meta:
+        ordering = ["-updated", "-creado"]
+
     def __str__(self):
         return self.nombre
     

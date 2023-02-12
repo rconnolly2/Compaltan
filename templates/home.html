@@ -3,15 +3,42 @@
 
 {% block content %}
 <!--Aqui es donde no se va incluir el html de main.html-->
-<h1>Home template</h1>
 
-<div>
+<style>
+    .contenedor-home {
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+    }
+</style>
+
+<h1>Home template</h1>
+<div class="contenedor-home">
+
+
+<div class="explora-temas">
+    <h3>Explora temas</h3>
+    <hr>
+    <a href="{% url 'home' %}">Todos</a><br>
+    {% for tema in temas %}
+
+        <a href=" ?q={{tema.nombre}}">{{tema}}</a><br>
+
+    {% endfor %}
+</div>
+
+<div class="lista-habitaciones">
+    <h3>Lista habitaciones:</h3>
+    <hr>
     {% for room in rooms %}
+        <a href="update-room/{{room.id}}">Editar</a><br>
+        <a href="eliminar-room/{{room.id}}">Eliminar</a><br>
         <p><a href="/room/{{room.id}}">{{room.id}}</a> y {{room.nombre}}</p>
         <p>Link con tag url: <a href="{% url 'room' room.id %}">Click</a></p>
         <!--Aqui es donde no se va incluir el html de main.html-->
 
     {% endfor %}
+
+</div>
 
 </div>
 

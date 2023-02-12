@@ -1,7 +1,15 @@
-{ extends "main.html" }
+{% extends "main.html" %}
 
-{% content block %}
+{% block content%}
 
-    
+    <div>
+        <a href="/create-room/">Crear habitacion</a>
+        <form method="POST" action=""><!--si no pongo nada lo envia a este url-->
+            {% csrf_token %}
+            {{form.as_p}}  <!--Por defecto form solo-->
+
+            <input type="submit" value="Submit">
+        </form>
+    </div>
 
 {% endblock content %}
