@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.db.models import Q # Esto te permite puertas "and" "or" etc .. buscando datos
 from django.http import HttpResponse
 from .models import Habitacion, Tema
 from .forms import HabitacionForm
@@ -16,7 +17,7 @@ def home(request):
         q = ""
 
     temas = Tema.objects.all()
-    rooms = Habitacion.objects.filter(tema__nombre__icontains=q)
+    rooms = Habitacion.objects.filter(Q(tema__nombre__icontains=q) | Q(descripcion__icontains=q) | Q(nombre__icontains=q)) # Q te permite poner varios parametros 
     contexto = {"rooms": rooms, "temas": temas}
     return render(request, "home.html", contexto)
 
