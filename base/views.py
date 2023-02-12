@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q # Esto te permite puertas "and" "or" etc .. buscando datos
 from django.http import HttpResponse
+from django.contrib.auth.models import User # Importa usuario del MODEL
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 from .models import Habitacion, Tema
 from .forms import HabitacionForm
 # Create your views here.
@@ -8,6 +11,30 @@ from .forms import HabitacionForm
 '''rooms = [{"id": 1, "name": "Me gusta python !"},
          {"id": 2, "name": "Me gusta C++ !"},
          {"id": 3, "name": "Me gusta DJANGO Framework !"}]'''
+
+def loginPage(request):
+
+    if request.method == "POST":
+        usuario = request.POST.get("usuario")
+        password = request.POST.get("password")
+
+        try:
+            user = User.objects.get(username=usuario)
+        except:
+            messages.error(request, "Usuario no existe")
+
+        user = authenticate(request, username=usuario, password=password)
+
+        if not (user is None):
+            login(request, user) # Si el objeto user NO esta vacio (porque la contraseña es valida)
+            return redirect("home")
+        else:
+            messages.error(request, "Contraseña no es valida!")
+
+
+    contexto = {}
+    return render(request, "login-register.html", contexto)
+
 
 def home(request):
 
@@ -18,7 +45,9 @@ def home(request):
 
     temas = Tema.objects.all()
     rooms = Habitacion.objects.filter(Q(tema__nombre__icontains=q) | Q(descripcion__icontains=q) | Q(nombre__icontains=q)) # Q te permite poner varios parametros 
-    contexto = {"rooms": rooms, "temas": temas}
+    numero_habitaciones = len(rooms)
+
+    contexto = {"rooms": rooms, "temas": temas, "numero_habitaciones": numero_habitaciones}
     return render(request, "home.html", contexto)
 
 def room(request, pk):
