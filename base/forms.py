@@ -5,3 +5,5 @@ class HabitacionForm(ModelForm):
     class Meta:
         model = Habitacion
         fields = "__all__" ## o danos datos especificios como : ["nombre, "id" ...]
+        exclude = ["host", "participantes"] # Aqui ponemos las propiedades de Habitacion que quiero excluir
+

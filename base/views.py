@@ -118,7 +118,9 @@ def createroom(request):
         print(request.POST)
         form = HabitacionForm(request.POST)
         if form.is_valid() == True:
-            form.save()
+            room = form.save(commit=False)
+            room.host = request.user # Pongo desde el server que el que envie el formulario es el host de Habitacion
+            room.save()
             return redirect("home")
 
 
