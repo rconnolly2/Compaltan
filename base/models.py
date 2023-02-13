@@ -37,5 +37,5 @@ class Mensaje(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     #Constructor
-    def __init__(self):
+    def __str__(self):
         return self.body[0:50]

@@ -3,8 +3,56 @@
 
 
 {% block content %}
+<style>
+    .div-habitacion {
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+    }
+</style>
+
+
 <!--Aqui es donde se va incluir el html de main.html-->
-<p style="color: brown; font-weight: bold;">Usuario <span style="color: lightblue;">@{{room.host}}</span> dice ...</p>
-<p>Esta es la pagina de: {{room.nombre}}</p>
+<div class="div-habitacion">
+    <div>
+
+    
+    <p style="color: brown; font-weight: bold;">Usuario <span style="color: lightblue;">@{{room.host}}</span> dice ...</p>
+    <p>Esta es la pagina de: {{room.nombre}}</p>
+
+    <p>room.descripcion</p>
+
+    <div class="caja-comentarios">
+        <h3>Conversacion</h3>
+        <hr>
+        {% for mensaje in mensajes %}
+            <div>
+                <small>@{{mensaje.usuario}}  hace {{mensaje.created|timesince}}</small>
+                <p>{{mensaje.body}}</p>
+                <hr>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if request.user.is_authenticated %}
+    <div class="formulario-comentario">
+        <form method="POST" action="">
+            {% csrf_token %}
+            <input type="text" name="body" placeholder="Pon tu comentario ..."><br>
+
+
+        </form>
+    </div>
+    {% endif %}
+    </div>
+
+
+    <div>
+        <h3>Participantes</h3>
+        <hr>
+    </div>
+
+
+</div>
+
 
 {% endblock content %}

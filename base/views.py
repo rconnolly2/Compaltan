@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required # Decorador de django para restringir paginas
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm # Nos facilita crear formulario para usuarios nuevos
-from .models import Habitacion, Tema
+from .models import Habitacion, Tema, Mensaje
 from .forms import HabitacionForm
 # Create your views here.
 
@@ -83,8 +83,13 @@ def home(request):
 
 def room(request, pk):
     room = Habitacion.objects.get(id=pk)
+    mensajes = room.mensaje_set.all().order_by("-created") #_set.all() coge todos los comentarios
 
-    contexto = {"room": room}
+    if request.method == "POST":
+        mensaje = Mensaje.objects.create(usuario=request.user, habitacion=room, body=request.POST.get("body"))
+        return redirect("room", pk=room.id) #Redirecciona con su pk
+
+    contexto = {"room": room, "mensajes": mensajes, "request": request}
 
     #return HttpResponse("Habitacion")
     return render(request, "room.html", contexto)
