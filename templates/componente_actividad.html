@@ -1,0 +1,10 @@
+{% for mensaje in mensajes_habitacion %}
+    <h3>Actividad reciente</h3>
+    <p><a href="{% url 'perfil-usuario' mensaje.usuario.id %}">@{{mensaje.usuario}}</a>  {{mensaje.created|timesince}}</p>
+    <small>respondido a {{mensaje.habitacion}}</small>
+
+    <p>{{mensaje}}</p>
+    {% if request.user == mensaje.usuario %}
+    <a href="{% url 'eliminar-mensaje' mensaje.id %}">Eliminar</a>
+    {% endif %}
+{% endfor %}

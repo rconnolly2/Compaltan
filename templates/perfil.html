@@ -1,0 +1,29 @@
+{% extends "main.html" %}
+
+{% block content %}
+
+<style>
+    .div-contenedor {
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
+    }
+</style>
+
+<h2>Perfil de, {{usuario.username}}</h2>
+
+
+<div class="div-contenedor">
+    <div class="tema">
+        {% include "componente_tema.html" %}
+    </div>
+
+    <div class="lista-habitaciones">
+        {% include "componente_lista_habitaciones.html" %}
+    </div>
+
+    <div>
+        {% include "componente_actividad.html" %}
+    </div>
+
+</div>
+{% endblock content %}

@@ -1,0 +1,8 @@
+<h3>Explora temas</h3>
+    <hr>
+    <a href="{% url 'home' %}">Todos</a><br>
+    {% for tema in temas %}
+
+        <a href=" ?q={{tema.nombre}}">{{tema}}</a><br>
+
+    {% endfor %}

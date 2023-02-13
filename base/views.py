@@ -77,22 +77,36 @@ def home(request):
     temas = Tema.objects.all()
     rooms = Habitacion.objects.filter(Q(tema__nombre__icontains=q) | Q(descripcion__icontains=q) | Q(nombre__icontains=q)) # Q te permite poner varios parametros 
     numero_habitaciones = len(rooms)
-
-    contexto = {"rooms": rooms, "temas": temas, "numero_habitaciones": numero_habitaciones, "request": request}
+    mensajes_habitacion = Mensaje.objects.filter(Q(habitacion__nombre__icontains=q)).order_by("-created")
+    
+    contexto = {"rooms": rooms, "temas": temas, "numero_habitaciones": numero_habitaciones, "request": request, "mensajes_habitacion": mensajes_habitacion}
     return render(request, "home.html", contexto)
 
 def room(request, pk):
     room = Habitacion.objects.get(id=pk)
     mensajes = room.mensaje_set.all().order_by("-created") #_set.all() coge todos los comentarios
+    participantes = room.participantes.all()
+
 
     if request.method == "POST":
         mensaje = Mensaje.objects.create(usuario=request.user, habitacion=room, body=request.POST.get("body"))
+        room.participantes.add(request.user)
         return redirect("room", pk=room.id) #Redirecciona con su pk
 
-    contexto = {"room": room, "mensajes": mensajes, "request": request}
+    contexto = {"room": room, "mensajes": mensajes, "request": request, "participantes": participantes}
 
     #return HttpResponse("Habitacion")
     return render(request, "room.html", contexto)
+
+
+def PerfilUsuario(request, pk):
+    usuario = User.objects.get(id=pk)
+    mensaje_habitacion = usuario.mensaje_set.all()
+    temas = Tema.objects.all()
+    habitaciones = usuario.habitacion_set.all() #Me da todas las propiedades de habitacion => del usuario
+
+    contexto = {"usuario": usuario, "rooms": habitaciones, "mensajes_habitacion": mensaje_habitacion, "temas": temas}
+    return render(request, "perfil.html", contexto)
 
 
 @login_required(login_url="login-page") # Decorador que restringe acceso y redirecciona a login
@@ -137,4 +151,20 @@ def eliminarHabitacion(request, pk):
         room.delete()
         return redirect("home")
 
+    return render(request, "eliminar.html", contexto)
+
+@login_required(login_url="login-page") # Decorador que restringe acceso y redirecciona a login
+def eliminarMensaje(request, pk):
+
+    mensaje = Mensaje.objects.get(id=pk)
+
+    if request.user != mensaje.usuario:
+        return HttpResponse("No estas permitido aqui !")
+
+
+    if request.method == "POST":
+        mensaje.delete()
+        return redirect("home")
+    
+    contexto = {"obj": mensaje}
     return render(request, "eliminar.html", contexto)

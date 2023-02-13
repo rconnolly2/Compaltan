@@ -16,7 +16,7 @@ class Habitacion(models.Model):
     tema = models.ForeignKey(Tema, on_delete=models.SET_NULL, null=True)
     nombre = models.CharField(max_length=200)
     descripcion = models.TextField(null=True, blank=True)
-    #participantes = 
+    participantes = models.ManyToManyField(User, related_name="participantes", blank=True)
     updated = models.DateTimeField(auto_now=True)
     creado = models.DateTimeField(auto_now_add=True) #Este valor solo cambia cuando se INICIA UNA VEZ
 

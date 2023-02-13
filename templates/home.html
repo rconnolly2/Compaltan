@@ -7,7 +7,7 @@
 <style>
     .contenedor-home {
         display: grid;
-        grid-template-columns: 1fr 3fr;
+        grid-template-columns: 1fr 3fr 1fr;
     }
 </style>
 
@@ -16,30 +16,18 @@
 
 
 <div class="explora-temas">
-    <h3>Explora temas</h3>
-    <hr>
-    <a href="{% url 'home' %}">Todos</a><br>
-    {% for tema in temas %}
-
-        <a href=" ?q={{tema.nombre}}">{{tema}}</a><br>
-
-    {% endfor %}
+    {% include "componente_tema.html" %}
 </div>
 
 <div class="lista-habitaciones">
     <h3>Lista habitaciones {{numero_habitaciones}}:</h3>
     <hr>
-    {% for room in rooms %}
-        {% if request.user == room.host %}
-        <a href="update-room/{{room.id}}">Editar</a><br>
-        <a href="eliminar-room/{{room.id}}">Eliminar</a><br>
-        {% endif %}
-        <p><a href="/room/{{room.id}}">{{room.id}}</a> y {{room.nombre}}</p>
-        <p>Link con tag url: <a href="{% url 'room' room.id %}">Click</a></p>
-        <!--Aqui es donde no se va incluir el html de main.html-->
+    {% include "componente_lista_habitaciones.html" %}
 
-    {% endfor %}
+</div>
 
+<div>
+{% include "componente_actividad.html" %}
 </div>
 
 </div>

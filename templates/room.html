@@ -26,6 +26,9 @@
         <hr>
         {% for mensaje in mensajes %}
             <div>
+                {% if request.user == mensaje.usuario %}
+                <a href="{% url 'eliminar-mensaje' mensaje.id %}">Eliminar</a>
+                {% endif %}
                 <small>@{{mensaje.usuario}}  hace {{mensaje.created|timesince}}</small>
                 <p>{{mensaje.body}}</p>
                 <hr>
@@ -49,6 +52,12 @@
     <div>
         <h3>Participantes</h3>
         <hr>
+
+        {% for participante in participantes %}
+            <div>
+                <p>@{{participante.username}}</p>
+            </div>
+        {% endfor %}
     </div>
 
 
