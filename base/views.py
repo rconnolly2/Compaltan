@@ -112,16 +112,22 @@ def PerfilUsuario(request, pk):
 @login_required(login_url="login-page") # Decorador que restringe acceso y redirecciona a login
 def createroom(request):
     form = HabitacionForm()
-    contexto = {"form": form}
+    temas = Tema.objects.all()
+
+    contexto = {"form": form, "temas": temas}
 
     if request.method == "POST":
-        print(request.POST)
-        form = HabitacionForm(request.POST)
-        if form.is_valid() == True:
+        tema_nombre = request.POST.get("tema")
+        tema, creado = Tema.objects.get_or_create(nombre=tema_nombre)
+
+        Habitacion.objects.create(host=request.user, tema=tema, nombre=request.POST.get("nombre"), descripcion=request.POST.get("descripcion"))
+        return redirect("home")
+        #form = HabitacionForm(request.POST)
+        '''if form.is_valid() == True:
             room = form.save(commit=False)
             room.host = request.user # Pongo desde el server que el que envie el formulario es el host de Habitacion
-            room.save()
-            return redirect("home")
+            room.save()'''
+            #return redirect("home")
 
 
     return render(request, "room_form.html", contexto)
@@ -130,17 +136,22 @@ def createroom(request):
 def actualizarHabitacion(request, pk):
     room = Habitacion.objects.get(id=pk)
     form = HabitacionForm(instance=room)
+    temas = Tema.objects.all()
 
     if not (request.user == room.host):
         return HttpResponse("Tu no estas permitido aqui !") #Que es request.user https://stackoverflow.com/questions/17312831/what-does-request-user-refer-to-in-django
 
     if request.method == "POST":
-        form = HabitacionForm(request.POST, instance=room)
-        if form.is_valid():
-            form.save()
-            return redirect("home")
+        #form = HabitacionForm(request.POST, instance=room)
+        tema_nombre = request.POST.get("tema")
+        tema, creado = Tema.objects.get_or_create(nombre=tema_nombre)
+        room.nombre = request.POST.get("nombre")
+        room.tema = tema
+        room.descripcion = request.POST.get("descripcion")
+        room.save()
+        return redirect("home")
 
-    contexto = {"form": form}
+    contexto = {"form": form, "temas": temas, "room": room}
 
     return render(request, "room_form.html", contexto)
 

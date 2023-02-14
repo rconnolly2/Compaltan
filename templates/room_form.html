@@ -18,15 +18,31 @@
           </div>
         </div>
         <div class="layout__body">
-          <form class="form" action="">
+          <form class="form" action="" method="POST">
             {% csrf_token %}
 
-            {% for campo in form %}
             <div class="form__group">
-              <label for="room_name">Room Name</label>
-              <input id="room_name" name="room_name" type="text" placeholder="E.g. Mastering Python + Django" />
+              <label for="room_tema">Tema</label>
+              <input required type="text" name="tema" list="tema-list" value="{{room.tema.nombre}}">
+              <datalist id="tema-list">
+                <select id="room_tema">
+                  {% for tema in temas %}
+                  <option>{{tema.nombre}}</option>
+                  {% endfor %}
+                </select>
+              </datalist>
             </div>
-            {% endfor %}
+
+            <div class="form__group">
+              <label for="room_nombre">Nombre Sala</label>
+              {{form.nombre}}
+            </div>
+
+            <div class="form__group">
+              <label for="room_descripcion">Nombre Descripción</label>
+              {{form.descripcion}}
+            </div>
+            
 
 
             <!--
