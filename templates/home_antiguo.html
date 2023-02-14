@@ -1,0 +1,35 @@
+{% extends "main.html" %}
+
+
+{% block content %}
+<!--Aqui es donde no se va incluir el html de main.html-->
+
+<style>
+    .contenedor-home {
+        display: grid;
+        grid-template-columns: 1fr 3fr 1fr;
+    }
+</style>
+
+<h1>Home template</h1>
+<div class="contenedor-home">
+
+
+<div class="explora-temas">
+    {% include "componente_tema.html" %}
+</div>
+
+<div class="lista-habitaciones">
+    <h3>Lista habitaciones {{numero_habitaciones}}:</h3>
+    <hr>
+    {% include "componente_lista_habitaciones.html" %}
+
+</div>
+
+<div>
+{% include "componente_actividad.html" %}
+</div>
+
+</div>
+
+{% endblock content %}
