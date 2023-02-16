@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required # Decorador de django 
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm # Nos facilita crear formulario para usuarios nuevos
 from .models import Habitacion, Tema, Mensaje
-from .forms import HabitacionForm
+from .forms import HabitacionForm, UsuarioForm
 # Create your views here.
 
 '''rooms = [{"id": 1, "name": "Me gusta python !"},
@@ -181,3 +181,18 @@ def eliminarMensaje(request, pk):
     
     contexto = {"obj": mensaje}
     return render(request, "eliminar.html", contexto)
+
+
+@login_required(login_url="login-page") # Decorador que restringe acceso y redirecciona a login
+def EditarUsuario(request, pk):
+    usuario = request.user
+    formulario = UsuarioForm(instance=usuario)
+
+    if request.method == "POST":
+        formulario = UsuarioForm(request.POST, instance=usuario)
+        if formulario.is_valid() == True:
+            formulario.save()
+            return redirect("perfil-usuario", pk=usuario.id)
+
+    contexto = {"formulario": formulario}
+    return render(request, "editar-usuario.html", contexto)

@@ -1,8 +1,9 @@
-{% extends "main.html" %}
+{% extends 'main.html' %}
+
 
 
 {% block content %}
-    <main class="delete-item layout">
+    <main class="update-account layout">
         <div class="container">
             <div class="layout__box">
                 <div class="layout__boxHeader">
@@ -16,24 +17,35 @@
                                 </path>
                             </svg>
                         </a>
-                        <h3>Volver atras</h3>
+                        <h3>Edita tu perfil</h3>
                     </div>
                 </div>
                 <div class="layout__body">
+
+                  
                     <form class="form" action="" method="POST">
-                        {% csrf_token %}
+
+                      {% csrf_token %}
+                      {% for campo in formulario %}
+
                         <div class="form__group">
-                            <p>Estas seguro que quieres eliminar este post/comentario</p>
+                            <label for="profile_pic">{{campo.label}}</label>
+                            {{campo}}
                         </div>
+                      {% endfor %}
 
-                        <div class="for__group">
-                            <input class="btn btn--main" type="submit" value="Confirmar" />
+                        <div class="form__action">
+                            <a class="btn btn--dark" href="{{request.META.HTTP_REFERER}}">Cancelar</a>
+                            <button class="btn btn--main" type="submit">Actualizar</button>
                         </div>
-
                     </form>
+                  
+
                 </div>
             </div>
         </div>
+      </div>
     </main>
-    <script src="script.js"></script>
+
+
 {% endblock content %}

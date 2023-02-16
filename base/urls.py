@@ -14,4 +14,5 @@ urlpatterns = [
     path("registrar-usuario/", views.registrarUsuario, name="registrarUsuario"),
     path("eliminar-mensaje/<str:pk>", views.eliminarMensaje, name="eliminar-mensaje"),
     path("perfil/<str:pk>", views.PerfilUsuario, name="perfil-usuario"),
+    path("editar-usuario/<str:pk>", views.EditarUsuario, name="editar-usuario"),
 ]
