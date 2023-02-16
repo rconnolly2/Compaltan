@@ -13,7 +13,7 @@ Este código una web contruida con Django framework y la libreria pillow se trat
 - Poner comentarios
 - Crear salas para compaltil
 - Tener foto de perfil
-![gif](https://i.ibb.co/xFFJfpB/2023-02-17-00h14-18.gif)
+![gif](https://github.com/rconnolly2/Compaltan/blob/master/compaltan.gif?raw=true)
 
 
 ## 💻Requisitos
