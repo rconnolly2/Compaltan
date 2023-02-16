@@ -2,7 +2,7 @@
 # Proyecto final Aplicaciones web SMR
 
 
-Este código una web contruida con Django framework y la libreria pillow se trata de una web donde la gente comparten sus apuntes de ahi el nombre de compaltan.
+Es una web contruida con Django framework y la libreria pillow se trata de una web donde la gente comparten sus apuntes de ahi el nombre de compaltan.
 
 
 
@@ -17,7 +17,7 @@ Este código una web contruida con Django framework y la libreria pillow se trat
 
 
 ## 💻Requisitos
-Este programa solo necesita python, django y la libreria pillow
+Este programa solo necesitas python, django y la libreria pillow
 
 
 ```bash
