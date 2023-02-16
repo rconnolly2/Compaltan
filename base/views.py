@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q # Esto te permite puertas "and" "or" etc .. buscando datos
 from django.http import HttpResponse
-from django.contrib.auth.models import User # Importa usuario del MODEL
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required # Decorador de django para restringir paginas
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm # Nos facilita crear formulario para usuarios nuevos
-from .models import Habitacion, Tema, Mensaje
-from .forms import HabitacionForm, UsuarioForm
+#from django.contrib.auth.forms import UserCreationForm # Nos facilita crear formulario para usuarios nuevos
+from .models import Habitacion, Tema, Mensaje, User
+from .forms import HabitacionForm, UsuarioForm, FormularioCrearUsuario
 # Create your views here.
 
 '''rooms = [{"id": 1, "name": "Me gusta python !"},
@@ -21,10 +21,10 @@ def logOut(request):
 
 def registrarUsuario(request):
     pagina = "registrar"
-    formulario = UserCreationForm()
+    formulario = FormularioCrearUsuario()
 
     if request.method == "POST":
-        formulario = UserCreationForm(request.POST)
+        formulario = FormularioCrearUsuario(request.POST)
         if formulario.is_valid() == True:
             usuario = formulario.save(commit=False)
             usuario.username = usuario.username.lower()
@@ -189,7 +189,7 @@ def EditarUsuario(request, pk):
     formulario = UsuarioForm(instance=usuario)
 
     if request.method == "POST":
-        formulario = UsuarioForm(request.POST, instance=usuario)
+        formulario = UsuarioForm(request.POST,request.FILES, instance=usuario)
         if formulario.is_valid() == True:
             formulario.save()
             return redirect("perfil-usuario", pk=usuario.id)
